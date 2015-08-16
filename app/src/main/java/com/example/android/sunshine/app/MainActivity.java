@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,8 +15,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -110,10 +113,23 @@ public class MainActivity extends AppCompatActivity {
                 urlConnection.connect();
 
                 InputStream inputStream = urlConnection.getInputStream();
+                StringBuffer buffer = new StringBuffer();
+                if (inputStream == null) {
+                    return null;
+                }
 
+                int i = 0;
+                byte[] b = new byte[4096];
+                while( (i = inputStream.read(b)) != -1){
+                    buffer.append(new String(b, 0, i));
+                }
 
-            } catch (Exception e) {
-                //
+                forecastJsonStr = buffer.toString();
+
+            } catch (MalformedURLException e) {
+                Log.e(e.toString(), e.getMessage());
+            } catch (IOException e){
+                Log.e(e.toString(),e.getMessage());
             }
 
 /*
