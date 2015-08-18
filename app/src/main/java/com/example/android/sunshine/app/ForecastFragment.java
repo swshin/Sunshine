@@ -101,8 +101,13 @@ public class ForecastFragment extends Fragment {
 
             String forecastJsonStr = null;
 
+            String cityCd = "40943";
+            String mode = "json";
+            String units = "metric";
+            String cnt = "7";
+
             try {
-                URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=40943&mode=json&units=metric&cnt=7");
+                URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q="+cityCd+"&mode="+mode+"&units="+units+"&cnt="+cnt);
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
