@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -101,12 +103,13 @@ public class ForecastFragment extends Fragment {
 
             String forecastJsonStr = null;
 
-            String cityCd = "40943";
+            String cityCd = "94043";
             String mode = "json";
             String units = "metric";
-            String cnt = "7";
+            int cnt = 7;
 
             try {
+                // test url : http://api.openweathermap.org/data/2.5/forecast/daily?q=40943&mode=json&units=metric&cnt=7
                 URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q="+cityCd+"&mode="+mode+"&units="+units+"&cnt="+cnt);
 
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -115,7 +118,7 @@ public class ForecastFragment extends Fragment {
 
                 InputStream inputStream = urlConnection.getInputStream();
                 StringBuffer buffer = new StringBuffer();
-                if (inputStream != null) {
+                if (inputStream == null) {
                       return null;
                 }
                 reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -130,10 +133,15 @@ public class ForecastFragment extends Fragment {
                 }
 
                 forecastJsonStr = buffer.toString();
-
+                String[] data = new String[cnt];
+                for (int i=0;i<cnt;i++) {
+                    data[i] = WeatherDataParser.getWeatherStr(forecastJsonStr, i);
+                }
             } catch (MalformedURLException e) {
                 Log.e(LOG_TAG, "ERROR", e);
             } catch (IOException e){
+                Log.e(LOG_TAG, "ERROR", e);
+            } catch (JSONException e) {
                 Log.e(LOG_TAG, "ERROR", e);
             } finally {
                 if (urlConnection != null) {

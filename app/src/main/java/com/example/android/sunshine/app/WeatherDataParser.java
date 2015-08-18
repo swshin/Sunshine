@@ -27,4 +27,21 @@ public class WeatherDataParser {
         return JSONTemp.getDouble("max");
     }
 
+    public static String getWeatherStr(String weatherJsonStr, int dayIndex)
+            throws JSONException {
+
+        String weatherStr = null;
+
+        JSONObject jObj = new JSONObject(weatherJsonStr);
+        // We get weather info (This is an array)
+        JSONArray jArr = jObj.getJSONArray("list");
+        JSONObject JSONList = jArr.getJSONObject(dayIndex);
+        JSONObject JSONTemp = JSONList.getJSONObject("temp");
+        JSONObject JSONWeather = JSONList.getJSONObject("weather");
+
+        weatherStr = JSONWeather.getString("main") + " - " + JSONTemp.getString("max") + "/" + JSONTemp.getString("min");
+
+        return weatherStr;
+    }
+
 }
