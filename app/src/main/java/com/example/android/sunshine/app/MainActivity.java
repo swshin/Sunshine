@@ -5,9 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-//import android.support.v7.app.ActionBarActivity;
-
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -37,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
-
             return true;
         }
 
