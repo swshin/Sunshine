@@ -2,6 +2,7 @@ package com.example.android.sunshine.app;
 
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ public class FetchWeatherTask extends AsyncTask<Void, Void, String[]> {
 
         String forecastJsonStr = null;
 
+        String appid = "92adf4c3de3ad11b719f0a4d8aa47688";
         String cityCd = "94043";
         String mode = "json";
         String units = "metric";
@@ -43,7 +45,7 @@ public class FetchWeatherTask extends AsyncTask<Void, Void, String[]> {
 
         try {
             // test url : http://api.openweathermap.org/data/2.5/forecast/daily?q=40943&mode=json&units=metric&cnt=7
-            URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q="+cityCd+"&mode="+mode+"&units="+units+"&cnt="+cnt);
+            URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q="+cityCd+"&mode="+mode+"&units="+units+"&cnt="+cnt+"&appid="+appid);
 
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -66,23 +68,11 @@ public class FetchWeatherTask extends AsyncTask<Void, Void, String[]> {
             }
 
             forecastJsonStr = buffer.toString();
+            Log.v(LOG_TAG, "Forecast JSON String: " + forecastJsonStr);
+
             for (int i=0;i<cnt;i++) {
                 data[i] = WeatherDataParser.getWeatherStr(forecastJsonStr, i);
             }
-
-//            List<String> weekForecast = new ArrayList<String>(
-//                    Arrays.asList(data));
-//
-//            ArrayAdapter<String> forecastAdapter = new ArrayAdapter<String>(
-//                    f.getActivity(),
-//                    R.layout.list_item_forecast,
-//                    R.id.list_item_forecast_textview,
-//                    weekForecast);
-//
-//            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-//
-//            ListView listView = (ListView) rootView.findViewById(R.id.list_item_forecast_textview);
-//            listView.setAdapter(forecastAdapter);
 
         } catch (MalformedURLException e) {
             Log.e(LOG_TAG, "ERROR", e);
@@ -102,8 +92,31 @@ public class FetchWeatherTask extends AsyncTask<Void, Void, String[]> {
                 }
             }
         }
-
         return data;
     }
 
+    @Override
+    protected void onProgressUpdate(Void... values) {
+        super.onProgressUpdate(values);
+    }
+
+    @Override
+    protected void onPostExecute(String[] data) {
+
+        List<String> weekForecast = new ArrayList<String>(
+                Arrays.asList(data));
+        ForecastFragment f = new ForecastFragment();
+        ArrayAdapter<String> forecastAdapter = new ArrayAdapter<String>(
+                f.getActivity(),
+                R.layout.list_item_forecast,
+                R.id.list_item_forecast_textview,
+                weekForecast);
+
+//        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+//        ListView listView = (ListView) rootView.findViewById(R.id.list_item_forecast_textview);
+//        listView.setAdapter(forecastAdapter);
+
+        super.onPostExecute(data);
+    }
 }

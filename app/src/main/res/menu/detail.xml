@@ -4,6 +4,6 @@
     tools:context=".MainActivity">
     <item android:id="@+id/detail_settings"
         android:title="@string/detail_settings"
-        android:orderInCategory="100"
+        android:orderInCategory="300"
         app:showAsAction="never" />
 </menu>
