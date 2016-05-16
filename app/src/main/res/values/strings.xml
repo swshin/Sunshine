@@ -9,4 +9,5 @@
     <string name="todayLowestCelcious">8</string>
     <string name="list_item_forecast_textview">Today-Sunny-88/63</string>
     <string name="action_refresh" translatable="false">Refresh</string>
+    <string name="action_share" translatable="false">Share</string>
 </resources>

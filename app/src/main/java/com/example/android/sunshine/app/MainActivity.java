@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -35,11 +36,11 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
             FetchWeatherTask weatherTask = new FetchWeatherTask();
-            weatherTask.execute();
+            weatherTask.execute("94043");
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
+    */
 }
