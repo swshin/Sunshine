@@ -30,7 +30,6 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
     private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
 
-    @Override
     protected String[] doInBackground(String... params) {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
@@ -90,7 +89,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             Log.v(LOG_TAG, "Forecast JSON String: " + forecastJsonStr);
 
             for (int i=0;i<numDays;i++) {
-                data[i] = WeatherDataParser.getWeatherStr(forecastJsonStr, i);
+                    data[i] = WeatherDataParser.getWeatherDataFromJson(forecastJsonStr, i);
             }
 
         } catch (MalformedURLException e) {

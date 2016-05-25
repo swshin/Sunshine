@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+
 /**
  * Created by swshin on 15. 8. 17.
  */
@@ -27,7 +29,7 @@ public class WeatherDataParser {
         return JSONTemp.getDouble("max");
     }
 
-    public static String getWeatherStr(String weatherJsonStr, int dayIndex)
+    public static String getWeatherDataFromJson(String weatherJsonStr, int dayIndex)
             throws JSONException {
 
         String weatherStr = null;
@@ -39,9 +41,13 @@ public class WeatherDataParser {
         JSONObject JSONTemp = JSONList.getJSONObject("temp");
         JSONArray JSONWeather = JSONList.getJSONArray("weather");
 
-        weatherStr = JSONWeather.getJSONObject(0).getString("main") + " - " + JSONTemp.getString("max") + "/" + JSONTemp.getString("min");
+        weatherStr = getReadableDateString(JSONList.getLong("dt")) + " - " + JSONWeather.getJSONObject(0).getString("main") + " - " + JSONTemp.getString("max") + "/" + JSONTemp.getString("min");
 
         return weatherStr;
+    }
+    private static String getReadableDateString(long time){
+        SimpleDateFormat shortenedDataFormat = new SimpleDateFormat("EEE MMM dd");
+        return shortenedDataFormat.format(time);
     }
 
 }

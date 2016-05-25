@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Sunshine</string>
+    <string name="action_settings">설정</string>
+    <string name="detail_settings">상세설정</string>
+    <string name="action_refresh" translatable="false">Refresh</string>
+    <string name="action_share" translatable="false">Share</string>
+    <string name="degree">o</string>
+    <string name="today">Today, June 24</string>
+    <string name="todayHighestCelcious">21</string>
+    <string name="todayLowestCelcious">8</string>
+    <string name="list_item_forecast_textview">Today-Sunny-88/63</string>
+    <string name="hello_world">Hello world!</string>
+</resources>
