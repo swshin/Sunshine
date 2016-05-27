@@ -47,7 +47,7 @@ public class WeatherDataParser {
     }
     private static String getReadableDateString(long time){
         SimpleDateFormat shortenedDataFormat = new SimpleDateFormat("EEE MMM dd");
-        return shortenedDataFormat.format(time);
+        return shortenedDataFormat.format(time*1000);
     }
 
 }
