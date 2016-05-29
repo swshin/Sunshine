@@ -1,5 +1,6 @@
 package com.example.android.sunshine.app;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -57,19 +58,6 @@ public class ForecastFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-//        if (item.getItemId() == R.menu.forecastfragment) {
-//            String[] data = new FetchWeatherTask().doInBackground();
-//            List<String> weekForecast = new ArrayList<String>(
-//                    Arrays.asList(data));
-//            ArrayAdapter<String> forecastAdapter = new ArrayAdapter<String>(
-//                    getActivity(),
-//                    R.layout.list_item_forecast,
-//                    R.id.list_item_forecast_textview,
-//                    weekForecast);
-//            Context context = new Context();
-//            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-//            ListView listView = (ListView) rootView.findViewById(R.id.list_item_forecast_textview);
-//            listView.setAdapter(forecastAdapter);
         int id = item.getItemId();
         if (id == R.id.action_refresh){
             FetchWeatherTask weatherTask = new FetchWeatherTask();
@@ -109,7 +97,10 @@ public class ForecastFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 String forecast = mForecastAdapter.getItem(position);
-                Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), DetailActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT, forecast);
+                startActivity(intent);
+//                Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
             }
         });
 
