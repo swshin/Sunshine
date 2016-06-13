@@ -1,3 +1,10 @@
 <resources>
-    <string name="array_name">Sunshine List</string>
+    <array name="pref_units_values">
+        <item>metric</item>
+        <item>imperial</item>
+    </array>
+    <array name="pref_units_options">
+        <item>Metric</item>
+        <item>Imperial</item>
+    </array>
 </resources>

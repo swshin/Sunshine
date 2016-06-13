@@ -1,5 +1,6 @@
 package com.example.android.sunshine.app;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -25,6 +26,7 @@ implements Preference.OnPreferenceChangeListener {
         addPreferencesFromResource(R.xml.pref_general);
 
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_units_key)));
     }
 
     private void bindPreferenceSummaryToValue(Preference preference) {

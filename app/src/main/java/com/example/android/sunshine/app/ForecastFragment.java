@@ -1,9 +1,11 @@
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +33,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,6 +41,7 @@ import java.util.List;
  */
 public class ForecastFragment extends Fragment {
 
+    private final String LOG_TAG = ForecastFragment.class.getSimpleName();
     private ArrayAdapter<String> mForecastAdapter;
 
     public ForecastFragment() {
@@ -60,34 +64,35 @@ public class ForecastFragment extends Fragment {
 
         int id = item.getItemId();
         if (id == R.id.action_refresh){
-            FetchWeatherTask weatherTask = new FetchWeatherTask();
-            weatherTask.execute("94043");
+            updateWeather();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateWeather() {
+        FetchWeatherTask weatherTask = new FetchWeatherTask();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location = prefs.getString(getString(R.string.pref_location_key),
+                getString(R.string.pref_location_default));
+        weatherTask.execute(location);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        String[] data = {
-                "Sun-Sunny-88/63",
-                "Mon-Rain-77/65",
-                "Tue-Sunny-88/77",
-                "Weds-Foggy-99/88",
-                "Thus-Rain-88/66",
-                "Fri-Sunny-77/66",
-                "Sat-Sunny-88/77" };
-
-        List<String> weekForecast = new ArrayList<String>(
-                Arrays.asList(data));
-
         mForecastAdapter = new ArrayAdapter<String>(
                 getActivity(),
                 R.layout.list_item_forecast,
                 R.id.list_item_forecast_textview,
-                weekForecast);
+                new ArrayList<String>());
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -107,6 +112,27 @@ public class ForecastFragment extends Fragment {
         return rootView;
     }
 
+    private String formatHighLows(double high, double low) {
+        SharedPreferences sharedPrefs =
+                PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String unitType = sharedPrefs.getString(
+                getString(R.string.pref_units_key),
+                getString(R.string.pref_units_metric));
+
+        if (unitType.equals(getString(R.string.pref_units_imperial))) {
+            high = (high * 1.8) + 32;
+            low = (low * 1.8) + 32;
+        } else if (!unitType.equals(getString(R.string.pref_units_metric))) {
+            Log.d(LOG_TAG, "Unit type not found: " + unitType);
+        }
+
+        long roundedHigh = Math.round(high);
+        long roundedLow = Math.round(low);
+
+        String highLowStr = roundedHigh + "/" + roundedLow;
+        return highLowStr;
+    }
+
     /**
      * Created by swshin on 15. 8. 30.
      */
@@ -115,8 +141,9 @@ public class ForecastFragment extends Fragment {
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
 
         private String getReadableDateString(long time){
-            SimpleDateFormat shortenedDataFormat = new SimpleDateFormat("EEE MMM dd");
-            return shortenedDataFormat.format(time);
+            Date date = new Date(time * 1000);
+            SimpleDateFormat format = new SimpleDateFormat("E, MMM d");
+            return format.format(date).toString();
         }
 
         protected String[] doInBackground(String... params) {
