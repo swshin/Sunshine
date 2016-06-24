@@ -41,12 +41,15 @@ public class WeatherDataParser {
         JSONObject JSONTemp = JSONList.getJSONObject("temp");
         JSONArray JSONWeather = JSONList.getJSONArray("weather");
 
-        weatherStr = getReadableDateString(JSONList.getLong("dt")) + " - " + JSONWeather.getJSONObject(0).getString("main") + " - " + JSONTemp.getString("max") + "/" + JSONTemp.getString("min");
+        String highLowStr = new ForecastFragment().formatHighLows(Double.parseDouble(JSONTemp.getString("max")), Double.parseDouble(JSONTemp.getString("min")));
+
+        weatherStr = getReadableDateString(JSONList.getLong("dt")) + " - " + JSONWeather.getJSONObject(0).getString("main") + " - " + highLowStr ;
 
         return weatherStr;
     }
+
     private static String getReadableDateString(long time){
-        SimpleDateFormat shortenedDataFormat = new SimpleDateFormat("EEE MMM dd");
+        SimpleDateFormat shortenedDataFormat = new SimpleDateFormat("E, MMM d");
         return shortenedDataFormat.format(time*1000);
     }
 

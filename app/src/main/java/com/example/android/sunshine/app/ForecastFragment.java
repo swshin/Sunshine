@@ -17,9 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import junit.framework.Test;
 
 import org.json.JSONException;
 
@@ -30,11 +27,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by swshin on 15. 8. 17.
@@ -112,7 +105,7 @@ public class ForecastFragment extends Fragment {
         return rootView;
     }
 
-    private String formatHighLows(double high, double low) {
+    public String formatHighLows(double high, double low) {
         SharedPreferences sharedPrefs =
                 PreferenceManager.getDefaultSharedPreferences(getActivity());
         String unitType = sharedPrefs.getString(
@@ -139,12 +132,6 @@ public class ForecastFragment extends Fragment {
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
-
-        private String getReadableDateString(long time){
-            Date date = new Date(time * 1000);
-            SimpleDateFormat format = new SimpleDateFormat("E, MMM d");
-            return format.format(date).toString();
-        }
 
         protected String[] doInBackground(String... params) {
             HttpURLConnection urlConnection = null;
