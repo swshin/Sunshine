@@ -1,5 +1,9 @@
 package com.example.android.sunshine.app;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,6 +14,8 @@ import java.text.SimpleDateFormat;
  * Created by swshin on 15. 8. 17.
  */
 public class WeatherDataParser {
+
+    private final static String LOG_TAG = WeatherDataParser.class.getSimpleName();
 
     /**
      * Given a string of the form returned by the api call:
@@ -41,7 +47,15 @@ public class WeatherDataParser {
         JSONObject JSONTemp = JSONList.getJSONObject("temp");
         JSONArray JSONWeather = JSONList.getJSONArray("weather");
 
-        String highLowStr = new ForecastFragment().formatHighLows(Double.parseDouble(JSONTemp.getString("max")), Double.parseDouble(JSONTemp.getString("min")));
+        double high = Double.parseDouble(JSONTemp.getString("max"));
+        double low  = Double.parseDouble(JSONTemp.getString("min"));
+
+        ForecastFragment forecastFragment = new ForecastFragment();
+
+        if (forecastFragment == null) {
+            Log.d(LOG_TAG, " forecastFragment is Null !!!" );
+        }
+        String highLowStr = forecastFragment.formatHighLows(high, low);
 
         weatherStr = getReadableDateString(JSONList.getLong("dt")) + " - " + JSONWeather.getJSONObject(0).getString("main") + " - " + highLowStr ;
 
@@ -52,5 +66,4 @@ public class WeatherDataParser {
         SimpleDateFormat shortenedDataFormat = new SimpleDateFormat("E, MMM d");
         return shortenedDataFormat.format(time*1000);
     }
-
 }

@@ -18,7 +18,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,6 +29,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -192,7 +195,7 @@ public class ForecastFragment extends Fragment {
                 Log.v(LOG_TAG, "Forecast JSON String: " + forecastJsonStr);
 
                 for (int i=0;i<numDays;i++) {
-                    data[i] = WeatherDataParser.getWeatherDataFromJson(forecastJsonStr, i);
+                    data[i] = getWeatherDataFromJson(forecastJsonStr, i);
                 }
 
             } catch (MalformedURLException e) {
@@ -235,6 +238,36 @@ public class ForecastFragment extends Fragment {
         }
     }
 
+    public String getWeatherDataFromJson(String weatherJsonStr, int dayIndex)
+            throws JSONException {
 
+        String weatherStr = null;
+
+        JSONObject jObj = new JSONObject(weatherJsonStr);
+        // We get weather info (This is an array)
+        JSONArray jArr = jObj.getJSONArray("list");
+        JSONObject JSONList = jArr.getJSONObject(dayIndex);
+        JSONObject JSONTemp = JSONList.getJSONObject("temp");
+        JSONArray JSONWeather = JSONList.getJSONArray("weather");
+
+        double high = Double.parseDouble(JSONTemp.getString("max"));
+        double low  = Double.parseDouble(JSONTemp.getString("min"));
+
+        ForecastFragment forecastFragment = new ForecastFragment();
+
+        if (forecastFragment == null) {
+            Log.d(LOG_TAG, " forecastFragment is Null !!!" );
+        }
+        String highLowStr = formatHighLows(high, low);
+
+        weatherStr = getReadableDateString(JSONList.getLong("dt")) + " - " + JSONWeather.getJSONObject(0).getString("main") + " - " + highLowStr ;
+
+        return weatherStr;
+    }
+
+    private static String getReadableDateString(long time){
+        SimpleDateFormat shortenedDataFormat = new SimpleDateFormat("E, MMM d");
+        return shortenedDataFormat.format(time*1000);
+    }
 
 }
