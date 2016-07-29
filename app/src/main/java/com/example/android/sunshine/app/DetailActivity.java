@@ -71,4 +71,12 @@ public class DetailActivity extends AppCompatActivity {
             return rootView;
         }
     }
+
+    public static class DetailFragment extends Fragment {
+        public DetailFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup)
+    }
 }
